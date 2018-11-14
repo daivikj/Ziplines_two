@@ -40,3 +40,11 @@ def create_customer(cid, cname, cphno, caddress):
 
 	mycursor.execute(sql,val)
 	mydb.commit()
+
+def get_products():
+
+	sql = "SELECT * FROM products"
+	mycursor.execute(sql)
+	products=mycursor.fetchall()
+
+	return products

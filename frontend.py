@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter.ttk import *
-from connector import create_seller, create_product, create_employee, create_customer
+from connector import create_seller, create_product, create_employee, create_customer, get_products
 
 LARGE_FONT=("Verdana",20)
 
@@ -18,14 +18,14 @@ class Ziplines(Tk):
 
 		self.geometry("800x600")
 		self.frames={}
-		#initialization of frames in the dictionary with key as the frame name and object returned as the value
-		for F in (Home,Seller_info,Products,Add_Products,Employees,Add_Employees,Customers,Add_Customers):
+		
+		for F in (Home,Seller_info,Products,Add_Products,Employees,Add_Employees,Customers,Add_Customers,display_products):
 			frame=F(parent=container,controller=self)
 			self.frames[F]=frame
 			frame.grid(row=0,column=0,sticky="nsew")
 		
 		self.show_frame(Home)
-		#code to display the frame required 
+		
 	def show_frame(self,cont):
 		frame=self.frames[cont]
 		frame.tkraise()
@@ -38,12 +38,12 @@ class Home(Frame):
 		Frame.__init__(self,parent)
 		self.controller=controller
 		label = Label(self, text="Home", font=LARGE_FONT)
-		label.grid(row=2, column=2, padx=10,pady=10)
+		label.grid(row=1, column=2, padx=10,pady=10)
 		button1=Button(self,text="Products",command=lambda:controller.show_frame(Products))
 		button2=Button(self,text="Employees",command=lambda:controller.show_frame(Employees))
-		button3=Button(self,text="Add_Orders",command=lambda:controller.show_frame(Add_Orders))
+		button3=Button(self,text="Add Orders",command=lambda:controller.show_frame(Add_Orders))
 		button4=Button(self,text="Customers",command=lambda:controller.show_frame(Customers))		
-		button5=Button(self,text="Track_Orders",command=lambda:controller.show_frame(View_Participants))
+		button5=Button(self,text="Track Orders",command=lambda:controller.show_frame(View_Participants))
 		button6=Button(self,text="Seller info",command=lambda:controller.show_frame(Seller_info))
 		
 
@@ -64,18 +64,21 @@ class Products(Frame):
 
 		Frame.__init__(self,parent)
 		self.controller  = controller
+		label = Label(self, text="Products", font=LARGE_FONT)
+		label.grid(row=1, column=2, padx=10,pady=10)
+
 		button1=Button(self,text="Add Product",command=lambda:controller.show_frame(Add_Products))
-		button2=Button(self,text="Delete Product",command=lambda:controller.show_frame(View_Participants))
+		button2=Button(self,text="Delete Product",command=lambda:controller.show_frame(display_products))
 		button3=Button(self,text="display",command=lambda:controller.show_frame(View_Participants))
 		button4=Button(self,text="seller info",command=lambda:controller.show_frame(View_Participants))
 		
-		self.back_button=Button(self,text="Back",command=lambda:controller.show_frame(Home))#button when pressed, moves back to the startPage
+		self.back_button=Button(self,text="Back",command=lambda:controller.show_frame(Home))
 		self.back_button.grid(row=5,column=3,padx=20,pady=20)
 		
-		button1.grid(row = 1,column =2,padx=20, pady =20 )
-		button2.grid(row = 2,column =2,padx=20, pady =20 )
-		button3.grid(row = 3,column =2,padx=20, pady =20 )
-		button4.grid(row = 4,column =2,padx=20, pady =20 )
+		button1.grid(row = 2,column =1,padx=20, pady =20 )
+		button2.grid(row = 3,column =1,padx=20, pady =20 )
+		button3.grid(row = 4,column =1,padx=20, pady =20 )
+		button4.grid(row = 5,column =1,padx=20, pady =20 )
 
 
 class Employees(Frame):
@@ -87,16 +90,20 @@ class Employees(Frame):
 
 		Frame.__init__(self,parent)
 		self.controller  = controller
+
+		label = Label(self, text="Employees", font=LARGE_FONT)
+		label.grid(row=1, column=2, padx=10,pady=10)
+
 		button1=Button(self,text="Add Employees",command=lambda:controller.show_frame(Add_Employees))
 		button2=Button(self,text="Delete Employees",command=lambda:controller.show_frame(View_Participants))
 		button3=Button(self,text="Employee Details",command=lambda:controller.show_frame(View_Participants))
 		
-		self.back_button=Button(self,text="Back",command=lambda:controller.show_frame(Home))#button when pressed, moves back to the startPage
+		self.back_button=Button(self,text="Back",command=lambda:controller.show_frame(Home))
 		self.back_button.grid(row=5,column=6,padx=20,pady=20)
 		
-		button1.grid(row = 1,column =5,padx=20, pady =20 )
-		button2.grid(row = 2,column =5,padx=20, pady =20 )
-		button3.grid(row = 3,column =5,padx=20, pady =20 )
+		button1.grid(row = 2,column =1,padx=20, pady =20 )
+		button2.grid(row = 3,column =1,padx=20, pady =20 )
+		button3.grid(row = 4,column =1,padx=20, pady =20 )
 
 class Customers(Frame):
 
@@ -107,16 +114,19 @@ class Customers(Frame):
 
 		Frame.__init__(self,parent)
 		self.controller  = controller
+
+		label = Label(self, text="Customers", font=LARGE_FONT)
+		label.grid(row=1, column=2, padx=10,pady=10)
 		button1=Button(self,text="Add Customers",command=lambda:controller.show_frame(Add_Customers))
 		button2=Button(self,text="Delete Customers",command=lambda:controller.show_frame(View_Participants))
 		button3=Button(self,text="Customers Info",command=lambda:controller.show_frame(View_Participants))
 		
 		self.back_button=Button(self,text="Back",command=lambda:controller.show_frame(Home))#button when pressed, moves back to the startPage
-		self.back_button.grid(row=4,column=6,padx=20,pady=20)
+		self.back_button.grid(row=5,column=2,padx=20,pady=20)
 		
-		button1.grid(row = 1,column =5,padx=20, pady =20 )
-		button2.grid(row = 2,column =5,padx=20, pady =20 )
-		button3.grid(row = 3,column =5,padx=20, pady =20 )
+		button1.grid(row = 2,column =1,padx=20, pady =20 )
+		button2.grid(row = 3,column =1,padx=20, pady =20 )
+		button3.grid(row = 4,column =1,padx=20, pady =20 )
 
 
 class Seller_info(Frame):
@@ -126,6 +136,9 @@ class Seller_info(Frame):
 
 		Frame.__init__(self,parent)
 		self.controller=controller
+
+		label = Label(self, text="Seller Information", font=LARGE_FONT)
+		label.grid(row=1, column=2, padx=10,pady=10)
 
 		self.seller_id_label = Label(self, text="Enter the seller id")		
 		self.seller_name_label = Label(self, text="Enter the seller name")
@@ -162,6 +175,9 @@ class Add_Products(Frame):
 
 		Frame.__init__(self,parent)
 		self.controller=controller
+
+		label = Label(self, text="Add Products", font=LARGE_FONT)
+		label.grid(row=1, column=2, padx=10,pady=10)
 
 		self.prod_id_label=Label(self,text="ID of the product")
 		self.prod_name_label=Label(self,text="Name of Product")
@@ -211,6 +227,8 @@ class Add_Employees(Frame):
 
 		Frame.__init__(self,parent)
 		self.controller=controller
+		label = Label(self, text="Add Employees", font=LARGE_FONT)
+		label.grid(row=1, column=2, padx=10,pady=10)
 
 		self.emp_id_label=Label(self,text="ID of Employee")
 		self.emp_name_label=Label(self,text="Name of Employee")
@@ -271,6 +289,8 @@ class Add_Customers(Frame):
 
 		Frame.__init__(self,parent)
 		self.controller=controller
+		label = Label(self, text="Add Customers", font=LARGE_FONT)
+		label.grid(row=1, column=2, padx=10,pady=10)
 
 		self.cust_id_label=Label(self,text="ID of customer")
 		self.cust_name_label=Label(self,text="Name of customer")
@@ -293,10 +313,10 @@ class Add_Customers(Frame):
 		self.cust_address.grid(row=5,column=2,padx=10,pady=10)
 	
 		self.back_button=Button(self,text="Back",command=lambda:controller.show_frame(Customers))
-		self.back_button.grid(row=6,column=3,padx=20,pady=20) 		
+		self.back_button.grid(row=6,column=2,padx=20,pady=20) 		
 
 		self.submit_button = Button(self,text="Submit",command=self.add_customer)
-		self.submit_button.grid(row=6,column=2,padx=20,pady=20)
+		self.submit_button.grid(row=6,column=3,padx=20,pady=20)
 
 	def add_customer(self):
 
@@ -311,6 +331,37 @@ class Add_Customers(Frame):
 		self.cust_address.delete("1.0","end")
 
 		create_customer(self.cid,self.cname,self.cphno,self.caddress)
+
+
+class display_products(Frame):
+
+	def __init__(self,parent,controller):
+
+
+		Frame.__init__(self,parent)
+		self.controller=controller
+
+		self.tree=Treeview( self, columns=('#0','#1','#2', '#3'))
+		self.tree.heading('#0',text='ID')
+		self.tree.heading('#1',text='Name')
+		self.tree.heading('#2',text='Price')
+		self.tree.heading('#3',text='seller id')
+
+		self.tree.column('#0',stretch=YES)
+		self.tree.column('#1',stretch=YES)
+		self.tree.column('#2', stretch=YES)
+		self.tree.column('#3', stretch=YES)
+		self.tree.grid(row=4, column=4 ,padx=10,pady=10,columnspan=4, sticky='nsew')
+		self.tree['show']='headings'
+		self.treeview = self.tree
+
+		products=get_products()
+
+		for i in products:
+			self.tree.insert("",END,values=i)
+
+		self.back_button=Button(self,text="Back",command=lambda:controller.show_frame(Home))
+		self.back_button.grid(row=6,column=3,padx=20,pady=20)
 
 
 app=Ziplines()
