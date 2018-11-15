@@ -205,6 +205,29 @@ class Add_Products(Frame):
 		self.submit_button=Button(self,text="Submit",command=self.add_product)
 		self.submit_button.grid(row=6,column=2,padx=20,pady=20)
 
+		self.tree=Treeview(self, columns=('#1','#2', '#3', '#4'))
+		self.tree.heading('#1',text='ID')
+		self.tree.heading('#2',text='Name')
+		self.tree.heading('#3',text='Price')
+		self.tree.heading('#4',text='seller id')
+
+		self.tree.column('#1',stretch=YES)
+		self.tree.column('#2',stretch=YES)
+		self.tree.column('#3', stretch=YES)
+		self.tree.column('#4', stretch=YES)
+		self.tree.grid(row=7, column=7 ,padx=10,pady=10,columnspan=3, sticky='nsew')
+		self.tree['show']='headings'
+		self.treeview = self.tree
+
+		products=get_products()
+
+		for i in products:
+			self.tree.insert("",END,values=i)
+
+		self.back1_button=Button(self,text="Back",command=lambda:controller.show_frame(Home))
+		self.back1_button.grid(row=6,column=3,padx=20,pady=20)
+
+		
 	def add_product(self):
 
 		self.pid=self.prod_id.get("1.0","end-1c")
@@ -218,7 +241,8 @@ class Add_Products(Frame):
 		self.prod_price.delete("1.0","end")
 
 		create_product(self.pid,self.pname,self.sid,self.pprice)
-		display_products.add_to_tree(self.pid,self.pname,self.sid,self.pprice)
+		self.treeview.insert('', 'end', values=( self.pid,self.pname,self.sid,self.pprice))
+
 
 
 class Add_Employees(Frame):
@@ -341,31 +365,7 @@ class display_products(Frame):
 		Frame.__init__(self,parent)
 		self.controller=controller
 
-		self.tree=Treeview(self, columns=('#1','#2', '#3', '#4'))
-		self.tree.heading('#1',text='ID')
-		self.tree.heading('#2',text='Name')
-		self.tree.heading('#3',text='Price')
-		self.tree.heading('#4',text='seller id')
-
-		self.tree.column('#1',stretch=YES)
-		self.tree.column('#2',stretch=YES)
-		self.tree.column('#3', stretch=YES)
-		self.tree.column('#4', stretch=YES)
-		self.tree.grid(row=4, column=4 ,padx=10,pady=10,columnspan=3, sticky='nsew')
-		self.tree['show']='headings'
-		self.treeview = self.tree
-
-		products=get_products()
-
-		for i in products:
-			self.tree.insert("",END,values=i)
-
-		self.back_button=Button(self,text="Back",command=lambda:controller.show_frame(Home))
-		self.back_button.grid(row=6,column=3,padx=20,pady=20)
-
-	def add_to_tree(pid,pname,sid,pprice):
-
-		display_products.__init__(self,parent,controller).treeview.insert('', 'end', pid, pname, sid, pprice)
+		
 
 
 app=Ziplines()
