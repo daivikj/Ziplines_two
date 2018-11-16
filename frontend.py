@@ -23,7 +23,7 @@ class Ziplines(Tk):
 		self.geometry("800x600")
 		self.frames={}
 		#initialization of frames in the dictionary with key as the frame name and object returned as the value
-		for F in (Home,Seller_info,Add_Products,Add_Employees,Add_Customers,Add_Orders,Display):
+		for F in (Home,Seller_info,Add_Products,Add_Employees,Add_Customers,Add_Orders,Display,emp_search_by_name,emp_search_by_dob):
 			frame=F(parent=container,controller=self)
 			self.frames[F]=frame
 			frame.grid(row=0,column=0,sticky="nsew")
@@ -183,7 +183,6 @@ class Add_Products(Frame):
 
 		self.treeview = self.tree
 
-
 		products=get_products()
 
 		for i in products:
@@ -280,36 +279,30 @@ class Add_Employees(Frame):
 
 		self.emp_id_label=Label(self,text="Id of Employee")
 		self.emp_name_label=Label(self,text="Name of Employee")
-		# self.emp_gender_label=Label(self,text="Gender")
 		self.emp_dob_label=Label(self,text="Employee Date of Birth")
 		self.emp_salary_label=Label(self,text="Employee salary")
 		self.emp_phno_label=Label(self,text="Phone Number")
 		
 		self.emp_id=Text(self,height=2,width=30)
 		self.emp_name=Text(self,height=2,width=30)
-		# self.emp_gender=Text(self,height=2,width=30)
 
 		self.var=StringVar()
-
 
 		self.r1=Radiobutton(self,text="male",variable=self.var,value="m",command=self.selected).grid(row=4,column=2,padx=10,pady=10)
 		self.r2=Radiobutton(self,text="female",variable=self.var,value="f",command=self.selected).grid(row=4,column=3,padx=10,pady=10)
 
 		self.emp_dob=Text(self,height=2,width=30)
-		# self.dob_button=Button(self, text='Calendar', command=lambda: self.opencal("Calendar"))
 		self.emp_salary=Text(self,height=2,width=30)
 		self.emp_phno=Text(self,height=2,width=30)
 		
 		self.emp_id_label.grid(row=2,column=1,padx=10,pady=10)
 		self.emp_name_label.grid(row=3,column=1,padx=10,pady=10)
-		# self.emp_gender_label.grid(row=4,column=1,padx=10,pady=10)
 		self.emp_dob_label.grid(row=5,column=1,padx=10,pady=10)
 		self.emp_salary_label.grid(row=6,column=1,padx=10,pady=10)
 		self.emp_phno_label.grid(row=7,column=1,padx=10,pady=10)
 
 		self.emp_id.grid(row=2,column=2,padx=10,pady=10)
 		self.emp_name.grid(row=3,column=2,padx=10,pady=10)
-		# self.emp_gender.grid(row=4,column=2,padx=10,pady=10)
 		self.emp_dob.grid(row=5,column=2,padx=10,pady=10)
 		self.emp_salary.grid(row=6,column=2,padx=10,pady=10)
 		self.emp_phno.grid(row=7,column=2,padx=10,pady=10)
@@ -323,8 +316,13 @@ class Add_Employees(Frame):
 		self.submit_button.grid(row=3,column=5,padx=20,pady=20)
 
 		self.select_button=Button(self,text="delete",command=self.select_item)
-		self.select_button.grid(row=10,column=5,padx=20,pady=20)
+		self.select_button.grid(row=4,column=5,padx=20,pady=20)
 
+		self.search_by_name=Button(self,text="Search by name",command=lambda:controller.show_frame(emp_search_by_name))
+		self.search_by_name.grid(row=5,column=5,padx=20,pady=20)
+
+		self.search_by_dob=Button(self,text="Search by name and DOB",command=lambda:controller.show_frame(emp_search_by_dob))
+		self.search_by_dob.grid(row=6,column=5,padx=20,pady=20)
 
 		self.tree=Treeview( self, columns=('#1','#2','#3', '#4','#5','#6'))
 		self.tree.heading('#1',text='ID')
@@ -351,26 +349,6 @@ class Add_Employees(Frame):
 		
 		for i in employees:
 			self.tree.insert("",END,values=i)
-
-	
-	# def opencal(self,msg):
-	# 	self.popup=tk.Toplevel()
-		
-	# 	self.msg=self.popup.wm_title("calender")
-	# 	self.la=ttk.Label(self.popup, text=msg, font=LARGE_FONT)
-	# 	self.la.grid(row=0,column=0, sticky='w')
-	# 	self.cal=Calendar(self.popup, font="Arial 14", selectmode='day',
-	# 					cursor='hand1', year=2018, month=2, day=5)
-	# 	self.bu=ttk.Button(self.popup, text="OK", command=self.print_sel)
-
-	# 	print(self.cal)
-
-	# 	self.cal.grid(row=1,column=0, sticky='w')
-	# 	self.bu.grid(row=2, column=0, sticky='w')
-
-	# 	self.popup.mainloop()
-
-
 
 	def selected(self):
 		
@@ -416,6 +394,120 @@ class Add_Employees(Frame):
 		
 		for selected_item in selected_items:
 			self.treeview.delete(selected_item)
+
+
+class emp_search_by_name(Frame):
+
+	def __init__(self,parent,controller):
+
+
+		Frame.__init__(self,parent)
+		self.controller=controller
+
+		self.search_label=Label(self,text="Enter the name")
+		self.search=Text(self,height=1,width=30)
+
+		self.search_label.grid(row=1,column=1,padx=10,pady=10)
+		self.search.grid(row=1,column=2,padx=10,pady=10)
+
+		self.search_by_name=Button(self,text="Search",command=self.search_name)
+		self.search_by_name.grid(row=2,column=2,padx=20,pady=20)
+
+		self.back_button=Button(self,text="Back",command=lambda:controller.show_frame(Add_Employees))
+		self.back_button.grid(row=3,column=2,padx=20,pady=20)
+
+	def search_name(self):
+
+		self.ename=self.search.get("1.0","end-1c")
+		self.search.delete("1.0","end")
+
+		self.tree=Treeview( self, columns=('#1','#2','#3', '#4','#5','#6'))
+		self.tree.heading('#1',text='ID')
+		self.tree.heading('#2',text='Name')
+		self.tree.heading('#3',text='Gender')
+		self.tree.heading('#4',text='dob')
+		self.tree.heading('#5',text='salary')
+		self.tree.heading('#6',text='Phone')
+
+		self.tree.column('#1',stretch=YES)
+		self.tree.column('#2',stretch=YES)
+		self.tree.column('#3', stretch=YES)
+		self.tree.column('#4', stretch=YES)
+		self.tree.column('#5', stretch=YES)
+		self.tree.column('#6', stretch=YES)
+
+		self.tree.grid(row=4, column=4 ,padx=10,pady=10,columnspan=4, sticky='nsew')
+		self.tree['show']='headings'
+		# self.tree.bind('<Button-1>', self.select_item)
+
+		self.treeview = self.tree
+
+		employees=emp_search_name(self.ename)
+		
+		for i in employees:
+			self.tree.insert("",END,values=i)
+
+		self.treeview.insert("",'end',values=(self.eid, self.ename, self.egender, self.edob, self.esalary, self.ephno))
+
+class emp_search_by_dob(Frame):
+
+	def __init__(self,parent,controller):
+
+		Frame.__init__(self,parent)
+		self.controller=controller
+
+		self.name_label=Label(self,text="Enter the name")
+		self.name=Text(self,height=1,width=30)
+
+		self.dob_label=Label(self,text="Enter the DOB")
+		self.dob=Text(self,height=1,width=30)
+
+		self.name_label.grid(row=1,column=1,padx=10,pady=10)
+		self.dob_label.grid(row=2,column=1,padx=10,pady=10)
+
+		self.name.grid(row=1,column=2,padx=10,pady=10)
+		self.dob.grid(row=2,column=2,padx=10,pady=10)
+
+		self.search=Button(self,text="Search",command=self.search_dob)
+		self.search.grid(row=3,column=2,padx=20,pady=20)
+
+		self.back_button=Button(self,text="Back",command=lambda:controller.show_frame(Add_Employees))
+		self.back_button.grid(row=3,column=1,padx=20,pady=20)
+
+	def search_dob(self):
+
+		self.ename=self.name.get("1.0","end-1c")
+		self.name.delete("1.0","end")
+		self.edob=self.dob.get("1.0","end-1c")
+		self.dob.delete("1.0","end")
+
+		self.tree=Treeview( self, columns=('#1','#2','#3', '#4','#5','#6'))
+		self.tree.heading('#1',text='ID')
+		self.tree.heading('#2',text='Name')
+		self.tree.heading('#3',text='Gender')
+		self.tree.heading('#4',text='dob')
+		self.tree.heading('#5',text='salary')
+		self.tree.heading('#6',text='Phone')
+
+		self.tree.column('#1',stretch=YES)
+		self.tree.column('#2',stretch=YES)
+		self.tree.column('#3', stretch=YES)
+		self.tree.column('#4', stretch=YES)
+		self.tree.column('#5', stretch=YES)
+		self.tree.column('#6', stretch=YES)
+
+		self.tree.grid(row=4, column=4 ,padx=10,pady=10,columnspan=4, sticky='nsew')
+		self.tree['show']='headings'
+		# self.tree.bind('<Button-1>', self.select_item)
+
+		self.treeview = self.tree
+
+		employees=emp_search_dob(self.ename, self.edob)
+		
+		for i in employees:
+			self.tree.insert("",END,values=i)
+
+		self.treeview.insert("",'end',values=(self.eid, self.ename, self.egender, self.edob, self.esalary, self.ephno))
 
 
 class Add_Customers(Frame):
@@ -711,12 +803,6 @@ class Add_Orders(Frame):
 		for selected_item in selected_items:
 			self.treeview.delete(selected_item)
 
-
-
-
-
-		
-			
 
 app=Ziplines()
 app.mainloop()		

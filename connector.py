@@ -150,3 +150,21 @@ def get_seller_name():
 
 	seller_name=mycursor.fetchall()
 	return seller_name
+
+def emp_search_name(ename):
+
+	sql="SELECT * FROM employee WHERE employee_name = %s"
+	val = (ename,)
+
+	mycursor.execute(sql,val)
+	emp=mycursor.fetchall()
+	return emp
+
+def emp_search_dob(ename, edob):
+
+	sql="SELECT * FROM employee WHERE employee_name = %s AND employee_dob = %s"
+	val = (ename,edob)
+
+	mycursor.execute(sql,val)
+	e=mycursor.fetchall()
+	return e
