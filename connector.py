@@ -113,8 +113,40 @@ def get_orders():
 
 def delete_order(oid):
 
-	sql= "DELETE FROM order WHERE order_id = %s"
+	sql= "DELETE FROM orders WHERE order_id = %s"
 	val=(oid,)
 
 	mycursor.execute(sql,val)
 	mydb.commit()
+
+def get_product_id():
+
+	sql="SELECT product_id from products"
+	mycursor.execute(sql)
+
+	product_ids=mycursor.fetchall()
+	return product_ids
+
+def get_customer_id():
+
+	sql="SELECT customer_id from customer"
+	mycursor.execute(sql)
+
+	customer_ids=mycursor.fetchall()
+	return customer_ids
+
+def get_seller_id():
+
+	sql="SELECT seller_id from seller"
+	mycursor.execute(sql)
+
+	seller_ids=mycursor.fetchall()
+	return seller_ids
+
+def get_seller_name():
+
+	sql="SELECT products.product_id, products.product_name, seller.seller_id, seller.seller_name from products INNER JOIN seller WHERE products.seller_id = seller.seller_id"
+	mycursor.execute(sql)
+
+	seller_name=mycursor.fetchall()
+	return seller_name
