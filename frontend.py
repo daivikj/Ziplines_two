@@ -23,17 +23,51 @@ class Ziplines(Tk):
 		self.geometry("800x600")
 		self.frames={}
 		#initialization of frames in the dictionary with key as the frame name and object returned as the value
-		for F in (Home,Seller_info,Add_Products,Add_Employees,Add_Customers,Add_Orders,Display,display_prod_name_price,emp_search_by_name,emp_search_by_dob,display_address):
+		for F in (Home,Seller_info,Add_Products,Add_Employees,Add_Customers,Add_Orders,Display,display_prod_name_price,emp_search_by_name,emp_search_by_dob,display_address,Login):
 			frame=F(parent=container,controller=self)
 			self.frames[F]=frame
 			frame.grid(row=0,column=0,sticky="nsew")
 			
 		
-		self.show_frame(Home)
+		self.show_frame(Login)
 		#code to display the frame required 
 	def show_frame(self,cont):
 		frame=self.frames[cont]
 		frame.tkraise()
+
+
+class Login(Frame):
+
+	def __init__(self,parent,controller):
+
+		Frame.__init__(self,parent)
+		self.controller=controller
+
+		label = Label(self, text="Login", font=LARGE_FONT )
+		label.grid(row=1, column=2, padx=10,pady=10)
+
+		self.password=Entry(self,width=30,show="*")
+		self.password.grid(row=3,column=3,padx=10,pady=10)
+
+
+		button1=Button(self,text="Login",command=self.access)
+		button1.grid(row =4, column = 3, padx=20, pady =20)
+		
+
+	def access(self):
+
+		self.passwd=self.password.get()
+		self.password.delete(0,"end")
+
+		if self.passwd == "root":
+
+			self.controller.show_frame(Home)
+
+		else:
+			 self.controller.show_frame(Login)	
+		
+
+
 
 class Home(Frame):
 
@@ -54,6 +88,8 @@ class Home(Frame):
 		button5=Button(self,text="Orders",command=lambda:controller.show_frame(Add_Orders))
 		button6=Button(self,text="Seller info",command=lambda:controller.show_frame(Seller_info))
 
+		button7=Button(self,text="Logout",command=lambda:controller.show_frame(Login))
+
 
 		button1.grid(row =2, column = 1, padx=20, pady =20)
 		button2.grid(row = 3, column = 1, padx=20, pady =20)
@@ -61,6 +97,7 @@ class Home(Frame):
 		button4.grid(row = 4,column =1,padx=20, pady =20 )
 		button5.grid(row = 5,column =1,padx=20, pady =20 )
 		button6.grid(row=6,column=1,padx=20,pady=20)
+		button7.grid(row=7,column=1,padx=20,pady=20)
 
 class Seller_info(Frame):
 
