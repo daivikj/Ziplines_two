@@ -111,6 +111,14 @@ def get_orders():
 	orders=mycursor.fetchall()
 	return orders
 
+def get_orders_address():
+
+	mycursor.callproc('orders_address')
+
+	for result in mycursor.stored_results():
+            order=result.fetchall()
+	return order
+
 def delete_order(oid):
 
 	sql= "DELETE FROM orders WHERE order_id = %s"
@@ -118,6 +126,15 @@ def delete_order(oid):
 
 	mycursor.execute(sql,val)
 	mydb.commit()
+
+def delete_seller(sid):
+
+	sql= "DELETE FROM seller WHERE seller_id = %s"
+	val=(sid,)
+
+	mycursor.execute(sql,val)
+	mydb.commit()
+
 
 def get_product_id():
 
@@ -143,7 +160,7 @@ def get_seller_id():
 	seller_ids=mycursor.fetchall()
 	return seller_ids
 
-def get_seller_name():
+def get_seller_product():
 
 	sql="SELECT products.product_id, products.product_name, seller.seller_id, seller.seller_name from products INNER JOIN seller WHERE products.seller_id = seller.seller_id"
 	mycursor.execute(sql)
@@ -168,3 +185,87 @@ def emp_search_dob(ename, edob):
 	mycursor.execute(sql,val)
 	e=mycursor.fetchall()
 	return e
+
+def search_products(pname,pprice):
+
+	sql="SELECT * from products WHERE product_name=%s and price<=%s"
+	val=(pname,pprice)
+
+	mycursor.execute(sql,val)
+	products=mycursor.fetchall()
+	return products
+
+def update_product(pid,pname,pprice,sid):
+
+	sql="UPDATE products set product_name=%s,price=%s,seller_id=%s WHERE product_id=%s"
+	val=(pname,pprice,sid,pid)
+
+	mycursor.execute(sql,val)
+	mydb.commit()
+
+	sql="SELECT * FROM products WHERE product_id=%s"
+	val=(pid,)
+	mycursor.execute(sql,val)
+	new_product=mycursor.fetchall()
+	return new_product
+
+def update_employee(eid,ename,egender,edob,esalary,ephno):
+
+	sql="UPDATE employee set employee_name=%s,employee_gender=%s,employee_dob=%s,employee_salary=%s,employee_phno=%s WHERE employee_id=%s"
+	val=(ename,egender,edob,esalary,ephno,eid)
+
+	mycursor.execute(sql,val)
+	mydb.commit()
+
+def update_customer(cid,cname,cphno,caddress):
+
+	sql="UPDATE customer set customer_name=%s,customer_phno=%s,customer_address=%s WHERE customer_id=%s"
+	val=(cname,cphno,caddress,cid)
+
+	mycursor.execute(sql,val)
+	mydb.commit()	
+
+
+def get_customer_name(cid):
+
+	sql="SELECT customer_name from customer WHERE customer_id = %s"
+	val=(cid,)
+	mycursor.execute(sql,val)
+
+	customer_names=mycursor.fetchall()
+	return customer_names
+
+def get_product_name(pid):
+
+	sql="SELECT product_name from products WHERE product_id = %s"
+	val=(pid,)
+	mycursor.execute(sql,val)
+
+	product_names=mycursor.fetchall()
+	return product_names
+
+def get_product_price(pid):
+
+	sql="SELECT price from products WHERE product_id = %s"
+	val=(pid,)
+	mycursor.execute(sql,val)
+
+	product_price=mycursor.fetchall()
+	return product_price
+
+def get_seller_name(sid):
+
+	sql="SELECT seller_name from seller WHERE seller_id = %s"
+	val=(sid,)
+	mycursor.execute(sql,val)
+
+	seller_names=mycursor.fetchall()
+	return seller_names
+
+def update_order(oid, pid, pname, sid, sname, pprice, cid, cname, stat, ename):
+
+	sql="UPDATE orders set product_id=%s,product_name=%s,seller_id=%s,seller_name=%s,price=%s,customer_id=%s,customer_name=%s,status=%s,employee_name=%s WHERE order_id=%s"
+	val=(pid, pname, sid, sname, pprice, cid, cname, stat, ename,oid)
+
+	mycursor.execute(sql,val)
+	mydb.commit()	
